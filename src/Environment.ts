@@ -15,9 +15,9 @@ export const Env = {
     findAtom(atom: Atom, env: Env): Term | undefined {
         return env.find(term => {
             if (term.termType === 'Variable') {
-                if (term.type === atom) return true
-                if (term.type.type === 'Implication' && term.type.consequent === atom) return true
-                return false 
+                const atomFound = Atom.compare(atom, term.type)
+                const functionFound = term.type.type === 'Implication' && Atom.compare(atom, term.type.consequent)
+                return atomFound || functionFound
             }
             return false
         });

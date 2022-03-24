@@ -38,6 +38,12 @@ type Variable = {
     type: Type
 }
 
+export const Variable = {
+    compare(variable: Variable, term: Term): boolean {
+        return term.termType === 'Variable' && term.name === variable.name
+    }
+}
+
 type Conjunction = {
     termType: 'Conjunction',
     components: Term[]

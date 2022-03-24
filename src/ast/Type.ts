@@ -6,12 +6,25 @@ export const Type = {
             type: 'Atom',
             value
         }
-    }
+    },
+    implication(antecedent: Type, consequent: Type): Implication {
+        return {
+            type: 'Implication',
+            antecedent,
+            consequent
+        }
+    },
 }
 
 export type Atom = { 
     type: 'Atom'
     value: string
+}
+
+export const Atom = {
+    compare(atom: Atom, type: Type): boolean {
+        return type.type === 'Atom' && atom.value === type.value
+    }
 }
 
 type Conjunction = {

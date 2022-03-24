@@ -1,5 +1,5 @@
-import { Term } from "./ast/Term"
-import { Type } from "./ast/Type"
+import { Term, Variable } from "./ast/Term"
+import { Atom, Type } from "./ast/Type"
 import { Env } from "./Environment"
 import { Fault } from "./out/Fault"
 import { Result } from "./out/Result"
@@ -11,9 +11,9 @@ const evaluateType: Evaluate = (type, env) => {
         case 'Atom': {
             const atom = Env.findAtom(type, env)
             if (typeof atom !== 'undefined' && atom.termType === 'Variable') {
-                if (atom.type === type) return atom
+                if (Atom.compare(type, atom.type)) return atom
                 if (atom.type.type === 'Implication') {
-                    const evalIn = Evaluate.type(atom.type.antecedent, env.filter(variable => variable != atom))
+                    const evalIn = Evaluate.type(atom.type.antecedent, env.filter(variable => Variable.compare(atom, variable)))
                     if (Result.isFaulty(evalIn)) return evalIn
                     if (evalIn.termType === 'Conjunction') return Term.application(atom.name, evalIn.components)
                     return Term.application(atom.name, [evalIn])
@@ -50,6 +50,6 @@ const evaluateType: Evaluate = (type, env) => {
     }
 }
 
-const Evaluate = {
+export const Evaluate = {
     type: evaluateType
 }
